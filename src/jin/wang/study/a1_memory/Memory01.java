@@ -10,16 +10,27 @@ public class Memory01 {
     static final boolean is64bit = true;
 
     public static void main(String... args) {
-        Double[] ascending = new Double[16];
-        for(int i=0;i<ascending.length;i++)
-            ascending[i] = (double) i;
+        String[] ascending = new String[16];
 
-        System.out.println("Before GC");
-        printAddresses("ascending", ascending);
 
-        System.gc();
-        System.out.println("\nAfter GC");
-        printAddresses("ascending", ascending);
+
+        int offset = unsafe.arrayBaseOffset(ascending.getClass());//获取数组第一个元素的偏移地址
+        int scale = unsafe.arrayIndexScale(ascending.getClass());//获取数组中元素的增量地址
+
+        System.out.println(offset);
+        System.out.println(scale);
+
+
+
+     //   for(int i=0;i<ascending.length;i++)
+           // ascending[i] = (double) i;
+
+//        System.out.println("Before GC");
+//        printAddresses("ascending", ascending);
+
+//        System.gc();
+//        System.out.println("\nAfter GC");
+//        printAddresses("ascending", ascending);
 
 
     }
@@ -27,8 +38,13 @@ public class Memory01 {
     public static void printAddresses(String label, Object... objects) {
         System.out.print(label + ": 0x");
         long last = 0;
-        int offset = unsafe.arrayBaseOffset(objects.getClass());
-        int scale = unsafe.arrayIndexScale(objects.getClass());
+        int offset = unsafe.arrayBaseOffset(objects.getClass());//获取数组第一个元素的偏移地址
+        int scale = unsafe.arrayIndexScale(objects.getClass());//获取数组中元素的增量地址
+
+        System.out.println(offset);
+        System.out.println(scale);
+
+
         switch (scale) {
             case 4:
                 long factor = is64bit ? 8 : 1;
@@ -59,5 +75,7 @@ public class Memory01 {
             throw new AssertionError(e);
         }
     }
+
+
 
 }
